@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Feed - Meme Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">
+                        Meme Feed
+                    </h1>
+                    <p class="app-subtitle">Discover hilarious memes</p>
+                </div>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">Create</a>
+                    <a href="feed.html" class="nav-link">Feed</a>
+                    <button id="authButton" class="auth-button">Login</button>
+                    <span id="userInfo" class="user-info" style="display: none;"></span>
+                </nav>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="feed-controls">
+                <div class="search-section">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search memes...">
+                    <button id="searchBtn" class="search-btn">Search</button>
+                </div>
+                <div class="sort-section">
+                    <label for="sortSelect">Sort by:</label>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="newest">Newest</option>
+                        <option value="popular">Most Liked</option>
+                        <option value="most_commented">Most Commented</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="feedContainer" class="feed-container">
+                <div class="loading" id="loading">Loading memes...</div>
+            </div>
+
+            <div id="pagination" class="pagination"></div>
+        </div>
+    </div>
+
+    <script type="module" src="api.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="feed.js"></script>
+</body>
+</html>
+
+

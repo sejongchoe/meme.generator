@@ -3,6 +3,12 @@ node_modules/
 package-lock.json
 yarn.lock
 
+# Backend
+backend/node_modules/
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/.env
+
 # Build outputs
 dist/
 build/

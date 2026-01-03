@@ -9,10 +9,20 @@
 <body>
     <div class="app-wrapper">
         <header class="app-header">
-            <h1 class="app-title">
-                Meme Generator
-            </h1>
-            <p class="app-subtitle">Create hilarious memes in seconds</p>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">
+                        Meme Generator
+                    </h1>
+                    <p class="app-subtitle">Create hilarious memes in seconds</p>
+                </div>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">Create</a>
+                    <a href="feed.html" class="nav-link">Feed</a>
+                    <button id="authButton" class="auth-button">Login</button>
+                    <span id="userInfo" class="user-info" style="display: none;"></span>
+                </nav>
+            </div>
         </header>
 
         <div class="container">
@@ -87,6 +97,9 @@
                     </div>
 
                     <div class="download-section">
+                        <button id="postBtn" class="post-btn" disabled>
+                            <span>Post to Feed</span>
+                        </button>
                         <button id="downloadBtn" class="download-btn" disabled>
                             <span>Download Meme</span>
                         </button>
@@ -96,6 +109,8 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="api.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

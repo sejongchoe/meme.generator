@@ -1,5 +1,8 @@
 // Meme Generator Script - Multiple Text Support
 
+import { memeAPI, authAPI } from './api.js';
+import { initAuth, updateAuthUI, openAuthModal } from './auth.js';
+
 const canvas = document.getElementById('memeCanvas');
 const ctx = canvas.getContext('2d');
 const imageUpload = document.getElementById('imageUpload');
@@ -8,6 +11,7 @@ const fontSizeValue = document.getElementById('fontSizeValue');
 const textColorPicker = document.getElementById('textColor');
 const colorPreview = document.getElementById('colorPreview');
 const downloadBtn = document.getElementById('downloadBtn');
+const postBtn = document.getElementById('postBtn');
 const canvasPlaceholder = document.getElementById('canvasPlaceholder');
 const templateButtons = document.getElementById('templateButtons');
 const addTextBtn = document.getElementById('addTextBtn');
@@ -251,6 +255,7 @@ function drawMeme() {
     canvas.style.display = 'block';
     canvasPlaceholder.classList.add('hidden');
     downloadBtn.disabled = false;
+    postBtn.disabled = false;
 }
 
 // Check if point is within text bounds
@@ -376,5 +381,59 @@ downloadBtn.addEventListener('click', () => {
     }, 'image/png');
 });
 
-// Initialize templates on load
+// Post meme to feed
+postBtn.addEventListener('click', async () => {
+    if (!currentImage) return;
+    
+    // Check if user is authenticated
+    if (!authAPI.isAuthenticated()) {
+        if (confirm('You need to be logged in to post memes. Would you like to login now?')) {
+            openAuthModal('login');
+        }
+        return;
+    }
+    
+    // Get title from user
+    const title = prompt('Enter a title for your meme:');
+    if (!title || !title.trim()) {
+        return;
+    }
+    
+    // Disable button during upload
+    postBtn.disabled = true;
+    postBtn.textContent = 'Posting...';
+    
+    try {
+        // Convert canvas to blob
+        const blob = await new Promise((resolve) => {
+            canvas.toBlob(resolve, 'image/png');
+        });
+        
+        // Prepare text elements data (remove bounds and other UI-specific data)
+        const textElementsData = textElements.map(el => ({
+            id: el.id,
+            text: el.text,
+            x: el.x,
+            y: el.y,
+            fontSize: el.fontSize,
+            color: el.color
+        }));
+        
+        // Upload meme
+        await memeAPI.create(blob, title.trim(), textElementsData);
+        
+        // Success - redirect to feed
+        if (confirm('Meme posted successfully! Would you like to view it in the feed?')) {
+            window.location.href = 'feed.html';
+        }
+    } catch (error) {
+        alert('Failed to post meme: ' + error.message);
+    } finally {
+        postBtn.disabled = false;
+        postBtn.innerHTML = '<span>Post to Feed</span>';
+    }
+});
+
+// Initialize auth and templates on load
+initAuth();
 initTemplates();

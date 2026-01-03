@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Meme Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">
+                        User Profile
+                    </h1>
+                    <p class="app-subtitle" id="profileSubtitle">Loading profile...</p>
+                </div>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">Create</a>
+                    <a href="feed.html" class="nav-link">Feed</a>
+                    <button id="authButton" class="auth-button">Login</button>
+                    <span id="userInfo" class="user-info" style="display: none;"></span>
+                </nav>
+            </div>
+        </header>
+
+        <div class="container">
+            <div id="profileContainer" class="profile-container">
+                <div class="loading" id="loading">Loading profile...</div>
+            </div>
+
+            <div id="userMemesContainer" class="user-memes-container">
+                <h2 class="section-title">Memes by <span id="usernameDisplay"></span></h2>
+                <div id="userMemesGrid" class="feed-container">
+                    <div class="loading">Loading memes...</div>
+                </div>
+                <div id="pagination" class="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="api.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="profile.js"></script>
+</body>
+</html>
+

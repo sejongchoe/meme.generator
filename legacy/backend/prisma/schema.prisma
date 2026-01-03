@@ -1,0 +1,89 @@
+// SQLite schema for easier local development (no PostgreSQL installation needed)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  
+  memes         Meme[]
+  likes         Like[]
+  comments      Comment[]
+  
+  @@map("users")
+}
+
+model Meme {
+  id            Int       @id @default(autoincrement())
+  userId        Int       @map("user_id")
+  imageUrl      String    @map("image_url")
+  title         String
+  textElements  String   @map("text_elements") // JSON stored as string in SQLite
+  likesCount    Int       @default(0) @map("likes_count")
+  commentsCount Int       @default(0) @map("comments_count")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes         Like[]
+  comments      Comment[]
+  tags          MemeTag[]
+  
+  @@map("memes")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  memeId    Int      @map("meme_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meme      Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, memeId])
+  @@map("likes")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  memeId    Int      @map("meme_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meme      Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  
+  @@map("comments")
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  memes     MemeTag[]
+  
+  @@map("tags")
+}
+
+model MemeTag {
+  memeId    Int      @map("meme_id")
+  tagId     Int      @map("tag_id")
+  
+  meme      Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([memeId, tagId])
+  @@map("meme_tags")
+}
+
+
