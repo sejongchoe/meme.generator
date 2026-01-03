@@ -1,20 +1,19 @@
 // InstantDB Schema Definition
-// This schema mirrors the Prisma schema from the backend
-
 import { i } from '@instantdb/core';
 
-// Define the schema for the meme platform
 const schema = i.graph(
   {
     users: i.entity({
       username: i.string(),
       email: i.string(),
       createdAt: i.number(),
+      dailyPostCount: i.number(),
+      lastPostDate: i.string(),
     }),
     memes: i.entity({
       title: i.string(),
       imageUrl: i.string(),
-      textElements: i.json(), // Store text elements as JSON
+      textElements: i.json(),
       createdAt: i.number(),
       userId: i.string(),
       likesCount: i.number(),
@@ -40,7 +39,6 @@ const schema = i.graph(
     }),
   },
   {
-    // Define relationships
     memeUser: {
       forward: { on: 'memes', has: 'one', label: 'user' },
       reverse: { on: 'users', has: 'many', label: 'memes' },
